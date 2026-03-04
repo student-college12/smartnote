@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SmartNote - Task App</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        main {
+            width: 520px;
+            padding: 30px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            color: white;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome {
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        input, textarea {
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            font-family: inherit;
+        }
+
+        textarea {
+            resize: none;
+            height: 60px;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            color: white;
+        }
+
+        .add-btn {
+            background: #00c851;
+        }
+
+        .add-btn:hover {
+            background: #007e33;
+            transform: scale(1.05);
+        }
+
+        .logout-btn {
+            background: #ff4444;
+        }
+
+        .logout-btn:hover {
+            background: #cc0000;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        li {
+            background: rgba(255, 255, 255, 0.2);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 12px;
+            transition: 0.3s ease;
+        }
+        li.completed {
+            opacity: 0.7;
+            background: rgba(0, 255, 0, 0.25);
+          }
+
+        li.completed .task-title,
+        li.completed .task-detail {
+             text-decoration: line-through;
+          }
+
+        li:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-3px);
+        }
+
+        .task-title {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .task-date {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .task-detail {
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .delete-btn {
+            margin-top: 10px;
+            background: #ff4444;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .delete-btn:hover {
+            background: #cc0000;
+        }
+
+    </style>
+</head>
+<body>
+
+<main>
+
+    <header>
+       <header>
+        <h2>Student Task</h2>
+        <a href="{% url 'logout' %}">
+        <button class="logout-btn">Logout</button>
+        </a>
+</header>
+
+    <p class="welcome">
+    Welcome, {{ request.user.username }} 
+    </p>
+    <section>
+        <input type="text" id="taskInput" placeholder="Task title..." onkeydown="handleKey(event)">
+        <input type="date" id="taskDate">
+        <textarea id="taskDetail" placeholder="Enter task details..."></textarea>
+        <button class="add-btn" onclick="addTask()">Add Task</button>
+    </section>
+
+    <ul id="taskList"></ul>
+
+</main>
+
+<script>
+    function addTask() {
+        let title = document.getElementById("taskInput").value.trim();
+        let date = document.getElementById("taskDate").value;
+        let detail = document.getElementById("taskDetail").value.trim();
+
+        if (title === "") {
+            alert("Please enter a task title!");
+            return;
+        }
+
+        let li = document.createElement("li");
+
+        li.innerHTML = `
+            <div class="task-title">${title}</div>
+            <div class="task-date">📅 ${date ? date : "No date selected"}</div>
+            <div class="task-detail">${detail ? detail : "No details"}</div>
+        `;
+        
+        let finishBtn = document.createElement("button");
+        finishBtn.textContent = "Finished";
+        finishBtn.style.background = "#33b5e5";
+        finishBtn.style.marginRight = "10px";
+
+        finishBtn.onclick = function() {
+        li.classList.toggle("completed");
+
+        if(li.classList.contains("completed")){
+            finishBtn.textContent = "Undo";
+        } else {
+            finishBtn.textContent = "Finished";
+        }
+    };
+
+
+        let deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.className = "delete-btn";
+        deleteBtn.onclick = function() {
+            li.remove();
+        };
+        li.appendChild(finishBtn);
+        li.appendChild(deleteBtn);
+        document.getElementById("taskList").appendChild(li);
+
+        document.getElementById("taskInput").value = "";
+        document.getElementById("taskDate").value = "";
+        document.getElementById("taskDetail").value = "";
+    }
+
+    function handleKey(event) {
+        if (event.key === "Enter") {
+            addTask();
+        }
+    }
+
+</script>
+
+</body>
+</html>
