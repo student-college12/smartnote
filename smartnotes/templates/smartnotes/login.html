@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SmartNote - Login</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        main {
+            width: 350px;
+            padding: 30px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            color: white;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background: #00c851;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        .switch {
+            margin-top: 15px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .error {
+            color: yellow;
+        }
+    </style>
+</head>
+
+<body>
+<main>
+    <h1>Login to SmartNote</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+
+    <div class="switch" 
+        onclick="window.location.href='{% url 'smartnotes:register' %}'">
+        Don't have an account? Register
+    </div>
+
+    {% if error_message %}
+        <p class="error">{{ error_message }}</p>
+    {% endif %}
+    {% if messages %}
+        {% for message in messages %}
+            <p class="error">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+</main>
+</body>
+</html>

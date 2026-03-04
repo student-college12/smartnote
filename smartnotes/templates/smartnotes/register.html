@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SmartNote - Register</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        main {
+            width: 350px;
+            padding: 30px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            color: white;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background: #00c851;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        .switch {
+            margin-top: 15px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .error {
+            color: yellow;
+        }
+    </style>
+</head>
+
+<body>
+<main>
+    <h1>Create an account</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Register</button>
+    </form>
+
+    <div class="switch" onclick="window.location.href='{% url 'smartnotes:login' %}'">
+        Already have an account? Login
+    </div>
+
+    {% if form.errors %}
+        <p class="error">Please correct the errors above.</p>
+    {% endif %}
+</main>
+</body>
+</html>
